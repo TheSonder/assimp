@@ -236,7 +236,7 @@ void ObjFileParser::parseFile(IOStreamBuffer<char> &streamBuffer) {
             getNameNoSpace(m_DataIt, m_DataItEnd, name);
             insideCstype = name == "cstype";
             goto pf_skip_line;
-        } break;
+        }
 
         default: {
         pf_skip_line:
@@ -458,7 +458,7 @@ void ObjFileParser::getFace(aiPrimitiveType type) {
             //OBJ USES 1 Base ARRAYS!!!!
             const char *token = &(*m_DataIt);
             const int iVal = ::atoi(token);
-            
+
             // increment iStep position based off of the sign and # of digits
             int tmp = iVal;
             if (iVal < 0) {
