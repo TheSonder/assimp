@@ -1,69 +1,43 @@
--- How to use:
--- 0. Get assimp from https://github.com/assimp/assimp
--- 1. Place this file next to the cloned assimp repository like this:
---
---       assimp.lua
---       assimp/
---
--- 2. Set up configuration headers
---
---     2.1 Create a folder for configuration headers, I usually name it _config_headers/
---
---          _config_headers/assimp/     <- config.h will be included as "assimp/config.h" so the assimp/ part is important
---          assimp.lua
---          assimp
---
---     2.2 Generate config.h and revision.h from assimp/code/config.h.in and assimp/revision.h.in and put them into _config_headers/assimp. (You can also just edit and rename them, that's what I usually end up doing.)
---
---          _config_headers/
---            assimp/
---              config.h
---              revision.h
---          assimp.lua
---          assimp
---
--- 3. Edit the 'files { ... }' and 'defines { ... }' depending on which importers/exporters you need. By default I enabled COLLADA, OBJ, FBX and ASSBIN (assimp binary, good for caching)
-
-project '*'
-	includedirs {
-		'_config_headers/',
-		'_config_headers/assimp/', -- Location of assimp's config.h, for a template see include/assimp/config.h.in
-		'assimp/include/',
-	}
 project 'assimp'
 	kind 'StaticLib'
 	warnings 'Off'
 	optimize 'Speed'
+	language "C++"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	includedirs {
-		'_config_headers/',
+		'_config_headers',
 		'_config_headers/assimp/',
-		'assimp/code',
+		'code',
 		"include",
         "contrib/irrXML",
         "contrib/zlib",
+        "contrib/zlib/contrib/minizip",
+        "contrib",
         "contrib/rapidjson/include",
+        "contrib/pugixml/src",
+        "./",
 	}
+
 	files {
 		-- Dependencies
-		'assimp/contrib/unzip/**',
-		'assimp/contrib/irrXML/**',
-		'assimp/contrib/zlib/*',
-		'assimp/contrib/zlib/*',
+		'contrib/unzip/**',
+		'contrib/irrXML/**',
+		'contrib/zlib/*',
+		'contrib/zlib/*',
 		-- Common
-		'assimp/code/Common/**',
-		'assimp/code/PostProcessing/**',
-		'assimp/code/Material/**',
-		'assimp/code/CApi/**',
+		'code/**',
 		-- Importers
-		'assimp/code/Collada/**',
-		'assimp/code/Obj/**',
+		'code/**',
 		-- 'assimp/code/Blender/**', 'assimp/contrib/poly2tri/poly2tri/**',
-		'assimp/code/FBX/**',
+		'code/FBX/**',
 		-- 'assimp/code/glTF2/**',
 		-- 'assimp/code/glTF/**',
-		'assimp/code/Assbin/**' -- For caching
+		'code/Assbin/**' -- For caching
 	}
+
 	-- Importers
 	defines {
 		'ASSIMP_BUILD_NO_3D_IMPORTER',
